@@ -1,0 +1,14 @@
+black
+blackdoc
+isort
+flake8
+flake8-pyi
+flake8-pyproject
+mypy
+coverage
+twine
+validate-pyproject
+pytest>=7.1
+pytest-cov
+pytest-regressions
+types-setuptools

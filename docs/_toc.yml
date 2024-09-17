@@ -1,0 +1,31 @@
+root: index
+subtrees:
+- entries:
+  - file: overview
+- entries:
+  - file: getting_started/index
+    entries:
+    - file: getting_started/installation
+- entries:
+  - file: code/index
+    entries:
+    - file: code/snip
+    - file: code/general/index
+      entries:
+      - file: code/general/check_type
+      - file: code/general/constants
+- caption: Articles
+  entries:
+  - file: snippets
+- entries:
+  - file: LICENSE/index
+    entries:
+    - file: LICENSE/donation
+    - file: LICENSE/closed-source-license
+- caption: Links
+  entries:
+  - file: getting-help
+  - title: Contact
+    url: https://mastodon.social/@msftcangoblowme
+meta:
+  exclude_missing: true

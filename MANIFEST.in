@@ -1,0 +1,16 @@
+# dependencies
+graft requirements
+
+# kitting+testing
+include Makefile
+
+# git
+include .gitignore
+
+# testing
+include .pre-commit-config.yaml
+graft tests
+prune tests/__pycache__
+
+# ci
+graft .github

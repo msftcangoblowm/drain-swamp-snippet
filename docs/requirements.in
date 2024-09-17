@@ -1,0 +1,16 @@
+# Licensed under the AGPLv3+ License: https://www.gnu.org/licenses/
+# For details: https://github.com/msftcangoblowm/drain-swamp-snippet/blob/master/NOTICE.txt
+
+-c ../requirements/prod.in
+
+sphinx
+sphinx-pyproject
+sphinx-autobuild
+sphinx-paramlinks
+sphobjinv   # cross-references inventories, objects.inv
+sphinx-external-toc-strict
+scriv       # for writing GitHub releases
+sphinx-copybutton
+sphinx_design
+sphinx-tabs
+sphinx-favicon

@@ -1,0 +1,199 @@
+[build-system]
+requires = ["setuptools>=70.0.0", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drain-swamp-snippet"
+license = {file = "LICENSE"}
+version = "0.0.1"
+description = "Change portions of static config files"
+keywords = ["snippet", "pyproject.toml", "Sphinx conf.py"]
+readme = "README.rst"
+requires-python = ">=3.8"
+classifiers = [
+    "Environment :: Console",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Typing :: Typed",
+]
+# Contact by mastodon please
+authors = [  # Contact by mastodon please
+    {name = "Dave Faulkmore", email = "faulkmore@protonmail.com"},
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "blackdoc",
+    "isort",
+    "flake8",
+    "flake8-pyi",
+    "flake8-pyproject",
+    "mypy",
+    "coverage",
+    "twine",
+    "validate-pyproject",
+    "pytest>=7.1",
+    "pytest-cov",
+    "pytest-regressions",
+    "types-setuptools",
+]
+
+[project.urls]
+"Changes" = 'https://raw.githubusercontent.com/msftcangoblowm/drain-swamp/master/CHANGES.rst'
+"Source code" = 'https://github.com/msftcangoblowm/drain-swamp-snippet'
+"Issue tracker" = 'https://github.com/msftcangoblowm/drain-swamp-snippet/issues'
+"Mastodon" = 'https://mastodon.social/@msftcangoblowme'
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["drain_swamp_snippet*"]
+
+[tool.mypy]
+mypy_path = "src"
+exclude = ['tests', 'docs']
+strict = true
+namespace_packages = true
+check_untyped_defs = true
+warn_unused_ignores = false  # events.pyi :38 and :43
+no_implicit_optional = true
+show_error_codes = true
+warn_redundant_casts = true
+strict_equality = true
+
+[tool.coverage.run]
+source_pkgs = ["drain_swamp_snippet"] # **REQUIRED** to be set correctly. Your package name
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "@abc.abstractmethod",
+    "@abc.abstractproperty",
+    "if TYPE_CHECKING:",
+    "if typing.TYPE_CHECKING:",
+]
+precision = 2
+ignore_errors = true
+skip_covered = true
+skip_empty = true
+fail_under = 95
+show_missing = true
+
+[tool.black]
+include = '\.pyi?$'
+extend-exclude = '''(src/drain_swamp_snippet/\_version.py)'''
+
+[tool.blackdoc]
+skip_string_normalization = true
+color = false  # affects diffs only
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+force_grid_wrap = 2
+use_parentheses = true
+include_trailing_comma = true
+ensure_newline_before_comments = true
+line_length = 88
+supported_extensions = ["py", "pyi"]
+skip = [
+    'src/drain_swamp_snippet/_version.py',
+]
+
+[tool.flake8]
+max_line_length = 88
+# E301, E302 for .pyi files, flake-pyi conflicts with black
+extend_ignore = [
+    "E704",
+    "E203",
+    "W503",
+    "W605",
+    "W293",
+    "W291",
+    "E301",
+    "E302",
+    "E501",
+]
+exclude = [
+    'src/drain_swamp_snippet/_version.py',
+]
+
+[tool.twine]
+sign = true
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:myst_parser.*:",
+    "ignore::DeprecationWarning:optparse.*:",
+]
+log_format = "%(asctime)s %(levelname)s %(message)s"
+log_date_format = "%Y-%m-%d %H:%M:%S"
+
+[tool.interrogate]
+color = true
+exclude = [
+    'src/drain_swamp_snippet/_version.py',
+    'docs',
+    'build',
+]
+fail-under = 95
+ignore-init-module = true
+quiet = false
+omit-covered-files = true
+# possible values 0 (minimal output), 1 (-v), 2 (-vv)
+verbose = 2
+
+[tool.sphinx-pyproject]
+language = "en"
+needs_sphinx = "1.7"
+templates_path = ['_templates',]
+html_static_path = ['_static',]
+html_css_files = ['css/custom.css',]
+# https://www.sphinx-doc.org/en/master/usage/markdown.html
+source_suffix = [".md", ".rst"]
+master_doc = "index"
+pygments_style = "sphinx"
+html_theme = "alabaster"
+numfig = true
+autosectionlabel_prefix_document = true
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.todo",
+    "sphinx.ext.doctest",
+    "sphinx_paramlinks",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.extlinks",
+    "sphinx_external_toc_strict",
+    "myst_parser",
+    "sphinx_copybutton",
+    "sphinx_design",
+    "sphinx_tabs.tabs",
+    "sphinx_favicon",
+]
+linkcheck_ignore = []
+myst_enable_extensions = ["colon_fence", "html_image"]
+external_toc_exclude_missing = true
+todo_include_todos = true
+
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+]
+doctest_show_successes = false
+doctest_test_doctest_blocks = "Yes please!"
+nitpicky = true
+autodoc_typehints = 'signature'

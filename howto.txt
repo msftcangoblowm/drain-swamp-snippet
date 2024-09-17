@@ -1,0 +1,51 @@
+* Release checklist
+
+- Run twice
+  $ make pre-commit
+- Remove old branches
+  $ git branch
+  $ git branch -D [branch name]
+- Check that the current virtualenv is activated and matches the current branch
+- start branch for release work
+    $ make relbranch
+- Edit supported Python version numbers. Search for "PYVERSIONS".
+    - README.rst
+    - docs/index.rst
+- Manually sphinx conf.py CHANGES.rst, and NOTICE.txt with release facts. Supply "next version":
+- Look over CHANGES.rst
+  Takes time. Rewrite commit messages to be accessible by normies. Rewrite it again.
+- Update README.rst
+    - "New in x.y:"
+- Update docs
+    - Check that the docs build correctly:
+        $ tox -e docs
+        or
+        $ cd docs && make doctest && cd - &>/dev/null
+        $ cd docs && make linkcheck && cd - &>/dev/null
+        $ cd docs && make html && cd - &>/dev/null
+        $ cd docs && make pdf && cd - &>/dev/null
+        $ twine check dist/*
+- commit the release-prep changes
+    $ make relcommit1
+    or
+    $ git status
+    $ git add [whatever]
+    $ git commit -S -m ""
+- Done with changes to source files
+    - check them in on the release prep branch
+    - wait for ci to finish
+    - merge to master
+      $ git branch
+      $ git switch master
+      $ git merge -S -m "Your merge commit message" [source_branch]
+    - Check web connection then push. Don't trigger a release until a tag push
+    - check build sdist **BEFORE** push. Catch issues in build backend
+      $ git push
+- Start the kits:
+    - Build drain-swamp-snippet. There are no config_settings
+      $ python -m build
+- Tag the tree -- Only when a release is ready and ci is passing
+    $ make tag
+    or
+    $ git tag -as -m "Version 1.0.0" 1.0.0
+    # git push --follow-tags

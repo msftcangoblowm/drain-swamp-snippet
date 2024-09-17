@@ -1,0 +1,16 @@
+# Licensed under the AGPLv3+ License: https://www.gnu.org/licenses/
+# For details: https://github.com/msftcangoblowm/drain-swamp-snippet/blob/master/NOTICE.txt
+
+# packaging and kitting
+
+-c pins.in
+-r prod.lock
+-r tox.lock
+
+pre-commit
+
+# pypi.org
+twine
+
+# viewer for vanilla ReStructuredText files (README.rst)
+restview

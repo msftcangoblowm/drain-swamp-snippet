@@ -14,6 +14,9 @@ Changelog
    Commit items for NEXT VERSION
    ..............................
 
+   - ci(release): add checkout and python setup
+   - ci(release): confirm env.DS_CONFIG_SETTINGS and contents
+
 .. scriv-start-here
 
 .. _changes_0-0-1:

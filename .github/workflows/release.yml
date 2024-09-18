@@ -24,13 +24,18 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+        python-version:
+          - "3.9"
 
     steps:
     # checkout and python-setup
     # Not using drain-swamp; outputs are ignored
-    - id: build-prepare
-      name: "Build Plugin parameters"
+    - name: "Build Plugin parameters"
       uses: 'msftcangoblowm/drain-swamp-action@v1'
       with:
         plugin_parameters: '{}'
@@ -38,13 +43,19 @@ jobs:
         fetch_tags: true
         python_version: '3.9'
 
-    - name: "Confirm outputs available"
-      env:
-        DS_CONFIG_SETTINGS: ${{ steps.build-prepare.outputs.ds_config_settings }}
+    - name: "Download artifact"
+      uses: actions/download-artifact@v4
+      with:
+        name: config-settings-${{ matrix.os }}-${{ matrix.python-version }}
+        path: '${{ runner.temp }}'
+
+    - name: "Assert env.DS_CONFIG_SETTINGS and show contents"
       shell: bash
       run: |
-        echo "env.DS_CONFIG_SETTINGS: ${{ env.DS_CONFIG_SETTINGS }}"
-        ls -alR
+        [[ -f "${{ env.DS_CONFIG_SETTINGS }}" ]] && cat '${{ env.DS_CONFIG_SETTINGS }}' || exit 1
+
+    - name: "Check out the repo"
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
     # https://stackoverflow.com/questions/66349002/get-latest-tag-git-describe-tags-when-repo-is-cloned-with-depth-1
     # echo "tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_OUTPUT
@@ -52,6 +63,14 @@ jobs:
       id: vars
       run: |
         echo "tag=$(git describe --tags)" >> $GITHUB_OUTPUT
+
+    - name: "Install Python"
+      uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
+      with:
+        python-version: "3.9" # Minimum of PYVERSIONS
+        # cache: pip
+        # cache-dependency-path: |
+        #  requirements/*${{ env.LOCK_SUFFIX }}
 
     - name: "Install tools"
       run: |
@@ -75,7 +94,7 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     needs:
     - build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment:
       name: pypi
       url: https://pypi.org/p/drain-swamp-snippet
@@ -106,7 +125,7 @@ jobs:
       and upload them to GitHub Release
     needs:
     - publish-to-pypi
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     permissions:
       contents: write  # IMPORTANT: mandatory for making GitHub Releases
@@ -148,7 +167,7 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     needs:
     - build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     environment:
       name: testpypi

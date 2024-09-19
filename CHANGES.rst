@@ -14,6 +14,9 @@ Changelog
    Commit items for NEXT VERSION
    ..............................
 
+   - ci(quality): turn on steps.docs
+   - chore: enable git diff .inv binary files
+
 .. scriv-start-here
 
 .. _changes_1-0-0.post0:

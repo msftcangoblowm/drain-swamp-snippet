@@ -98,7 +98,6 @@ jobs:
   docs:
     name: "Build docs"
     runs-on: ubuntu-latest
-    if: false  # DISABLE UNTIL rtd published
     concurrency:
       group: docs-${{ github.ref }}
       cancel-in-progress: false  # quality then gh-pages

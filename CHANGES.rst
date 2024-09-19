@@ -14,10 +14,15 @@ Changelog
    Commit items for NEXT VERSION
    ..............................
 
-   - ci(quality): turn on steps.docs
-   - chore: enable git diff .inv binary files
-
 .. scriv-start-here
+
+.. _changes_1-0-0.post1:
+
+Version 1-0-0.post1 — 2024-09-19
+--------------------------------
+
+- ci(quality): turn on steps.docs
+- chore: enable git diff .inv binary files
 
 .. _changes_1-0-0.post0:
 

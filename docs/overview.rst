@@ -14,7 +14,7 @@ Overview
 Whats a snippet?
 -----------------
 
-Within a configuration, there are times when a some bit of text needs to be changed.
+Within a configuration, there are times when some bit of text needs to be changed.
 
 The only requirement is the file format should recognize pound symbol ``#`` as a comment.
 
@@ -51,13 +51,13 @@ This is a base package. Other authors are encouraged to:
 
 - avoid packages with snippet implementations, when only just want the base class, Snip
 
-Packages using drain-swamp-snippet_
------------------------------------
+Packages using drain-swamp-snippet-pypi_
+------------------------------------------
 
-- drain-swamp_
+- drain-swamp-pypi_
 
-.. _drain-swamp: https://pypi.org/project/drain-swamp
-.. _drain-swamp-snippet: https://pypi.org/project/drain-swamp-snippet
+.. _drain-swamp-pypi: https://pypi.org/project/drain-swamp
+.. _drain-swamp-snippet-pypi: https://pypi.org/project/drain-swamp-snippet
 
 Acknowledgement
 ---------------

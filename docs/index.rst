@@ -28,6 +28,10 @@
 
 \* Python 3.9 through 3.13, PyPy
 
+**New in 1.0.x**
+
+integration with drain-swamp-action; all badges;
+
 **New in 0.0.x**
 
 move snip from package drain-swamp;

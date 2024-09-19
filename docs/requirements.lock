@@ -162,7 +162,7 @@ sphinx-copybutton==0.5.2
     # via -r requirements.in
 sphinx-design==0.6.1
     # via -r requirements.in
-sphinx-external-toc-strict==1.2.2.post4
+sphinx-external-toc-strict==1.2.3.post0
     # via -r requirements.in
 sphinx-favicon==1.0.1
     # via -r requirements.in

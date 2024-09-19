@@ -16,6 +16,13 @@ Changelog
 
 .. scriv-start-here
 
+.. _changes_1-0-0.post0:
+
+Version 1-0-0.post0 — 2024-09-19
+--------------------------------
+
+- fix(rtd): requirements path
+
 .. _changes_1-0-0:
 
 Version 1-0-0 — 2024-09-19

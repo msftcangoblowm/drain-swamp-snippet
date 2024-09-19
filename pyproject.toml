@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "drain-swamp-snippet"
 license = {file = "LICENSE"}
-version = "1.0.0"
+version = "1.0.0.post0"
 description = "Change portions of static config files"
 keywords = ["snippet", "pyproject.toml", "Sphinx conf.py"]
 readme = "README.rst"

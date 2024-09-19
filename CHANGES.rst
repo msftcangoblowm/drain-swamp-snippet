@@ -21,6 +21,7 @@ Changelog
 Version 1-0-0 — 2024-09-19
 --------------------------
 
+- ci(test-coverage: bump codecov/codecov-action
 - docs: add all badges
 - ci: update deadsnakes/action and codecov/codecov-action
 - ci(release): add checkout and python setup

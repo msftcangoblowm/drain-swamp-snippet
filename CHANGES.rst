@@ -16,6 +16,13 @@ Changelog
 
 .. scriv-start-here
 
+.. _changes_1-0-0.post2:
+
+Version 1-0-0.post2 — 2024-09-20
+--------------------------------
+
+- fix: add py.typed
+
 .. _changes_1-0-0.post1:
 
 Version 1-0-0.post1 — 2024-09-19

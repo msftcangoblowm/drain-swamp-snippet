@@ -21,6 +21,7 @@ Changelog
 Version 1-0-0.post2 — 2024-09-20
 --------------------------------
 
+- ci(python-nightly): fix deadsnakes/action tag
 - fix: add py.typed
 
 .. _changes_1-0-0.post1:

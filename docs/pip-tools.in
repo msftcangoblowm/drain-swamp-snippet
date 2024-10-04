@@ -1,0 +1,9 @@
+# Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
+# For details: https://github.com/msftcangoblowm/drain-swamp-snippet/blob/master/NOTICE.txt
+
+-c ../requirements/pins.in
+
+pip<24.2
+
+pip-tools
+get-pypi-latest-version

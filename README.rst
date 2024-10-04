@@ -16,7 +16,7 @@ Change portions of static config files
 
 **New in 1.0.x**
 
-integration with drain-swamp-action; all badges;
+integration with drain-swamp-action; all badges; docs to py310;
 
 **New in 0.0.x**
 

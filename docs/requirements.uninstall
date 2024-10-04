@@ -1,0 +1,19 @@
+# python -m pip uninstall --yes -r docs/requirements.uninstall
+alabaster
+myst-parser
+Sphinx
+sphinx-autobuild
+sphinx-copybutton
+sphinx_design
+sphinx-external-toc-strict
+sphinx-favicon
+sphinx-paramlinks
+sphinx-pyproject
+sphinx-tabs
+sphinxcontrib-applehelp
+sphinxcontrib-devhelp
+sphinxcontrib-htmlhelp
+sphinxcontrib-jsmath
+sphinxcontrib-qthelp
+sphinxcontrib-serializinghtml
+sphobjinv

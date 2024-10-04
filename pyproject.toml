@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "drain-swamp-snippet"
 license = {file = "LICENSE"}
-version = "1.0.0.post2"
+version = "1.0.1"
 description = "Change portions of static config files"
 keywords = ["snippet", "pyproject.toml", "Sphinx conf.py"]
 readme = "README.rst"
@@ -52,7 +52,7 @@ dev = [
 ]
 
 [project.urls]
-"Changes" = 'https://raw.githubusercontent.com/msftcangoblowm/drain-swamp/master/CHANGES.rst'
+"Changes" = 'https://raw.githubusercontent.com/msftcangoblowm/drain-swamp-snippet/master/CHANGES.rst'
 "Source code" = 'https://github.com/msftcangoblowm/drain-swamp-snippet'
 "Issue tracker" = 'https://github.com/msftcangoblowm/drain-swamp-snippet/issues'
 "Mastodon" = 'https://mastodon.social/@msftcangoblowme'
@@ -146,6 +146,7 @@ log_date_format = "%Y-%m-%d %H:%M:%S"
 color = true
 exclude = [
     'src/drain_swamp_snippet/_version.py',
+    '.doc',
     'docs',
     'build',
 ]

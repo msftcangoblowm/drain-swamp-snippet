@@ -26,7 +26,7 @@ version = version_xyz
 # The full version, including alpha/beta/rc tags.
 # release = release
 # The date of release, in "monthname day, year" format.
-release_date = "September 17, 2024"
+release_date = "October 4, 2024"
 
 config = SphinxConfig(
     # Path(__file__).parent.parent.joinpath("pyproject.toml"),

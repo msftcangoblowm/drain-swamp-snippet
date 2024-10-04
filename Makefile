@@ -24,6 +24,7 @@ else
 is_venv = 1
 VENV_BIN := $(VIRTUAL_ENV)/bin
 VENV_BIN_PYTHON := python3
+PY_X_Y=$(shell $(VENV_BIN_PYTHON) -c 'import platform; t_ver = platform.python_version_tuple(); print(".".join(t_ver[:2]));')
 endif
 
 ifeq ($(is_venv),1)
@@ -44,6 +45,45 @@ endif
 .PHONY: help
 help:					## (Default) Display this help -- Always up to date
 	@awk -F ':.*##' '/^[^: ]+:.*##/{printf "  \033[1m%-20s\033[m %s\n",$$1,$$2} /^##@/{printf "\n%s\n",substr($$0,5)}' $(MAKEFILE_LIST)
+
+##@ Build dependencies
+
+.PHONY: upgrade doc_upgrade diff_upgrade _upgrade
+PIP_COMPILE = $(VENV_BIN_PYTHON) -m piptools compile --allow-unsafe --resolver=backtracking
+
+upgrade:				## Update the *.lock files with the latest packages satisfying *.in files.
+	@$(MAKE) _upgrade COMPILE_OPTS="--upgrade"
+
+upgrade-one:			## Update the *.lock files for one package. `make upgrade-one package=...`
+	@test -n "$(package)" || { echo "\nUsage: make upgrade-one package=...\n"; exit 1; }
+	$(MAKE) _upgrade COMPILE_OPTS="--upgrade-package $(package)"
+
+_upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
+_upgrade:
+ifeq ($(is_venv),1)
+	@if [[ "$(PY_X_Y)" == "3.9" ]]; then
+
+	@pip install --quiet --disable-pip-version-check -r requirements/pip-tools.lock
+	$(PIP_COMPILE) -o requirements/pip.lock requirements/pip.in
+	$(PIP_COMPILE) -o requirements/pip-tools.lock requirements/pip-tools.in
+	$(PIP_COMPILE) -o requirements/kit.lock requirements/kit.in
+	$(PIP_COMPILE) --no-strip-extras -o requirements/mypy.lock requirements/mypy.in
+	$(PIP_COMPILE) --no-strip-extras -o requirements/tox.lock requirements/tox.in
+
+	$(PIP_COMPILE) --no-strip-extras -o requirements/manage.lock requirements/manage.in
+	$(PIP_COMPILE) --no-strip-extras -o requirements/dev.lock requirements/dev.in
+
+	fi
+endif
+
+diff_upgrade:			## Summarize the last `make upgrade`
+	@# The sort flags sort by the package name first, then by the -/+, and
+	@# sort by version numbers, so we get a summary with lines like this:
+	@#      -bashlex==0.16
+	@#      +bashlex==0.17
+	@#      -build==0.9.0
+	@#      +build==0.10.0
+	@/bin/git diff -U0 | /bin/grep -v '^@' | /bin/grep == | /bin/sort -k1.2,1.99 -k1.1,1.1r -u -V
 
 ##@ Testing
 
@@ -85,11 +125,15 @@ endif
 # --cov-report=xml
 # Dependencies: pytest, pytest-cov, pytest-regressions
 # make [v=1] coverage
+# @$(VENV_BIN)/pytest --showlocals --cov=drain_swamp_snippet --cov-report=term-missing --cov-config=pyproject.toml $(verbose_text) tests
 .PHONY: coverage
 coverage: private verbose_text = $(if $(v),"--verbose")
 coverage:				## Run tests, generate coverage reports -- make [v=1] coverage
 ifeq ($(is_venv),1)
-	@$(VENV_BIN)/pytest --showlocals --cov=drain_swamp_snippet --cov-report=term-missing --cov-config=pyproject.toml $(verbose_text) tests
+	-@$(VENV_BIN_PYTHON) -m coverage erase
+	@$(VENV_BIN_PYTHON) -m coverage run --parallel -m pytest --showlocals tests
+	$(VENV_BIN_PYTHON) -m coverage combine
+	$(VENV_BIN_PYTHON) -m coverage report --fail-under=95
 endif
 
 ##@ Kitting

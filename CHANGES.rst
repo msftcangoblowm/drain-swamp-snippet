@@ -16,6 +16,17 @@ Changelog
 
 .. scriv-start-here
 
+.. _changes_1-0-1:
+
+Version 1-0-1 — 2024-10-04
+--------------------------------
+
+- fix: dependency updating python version sensitive
+- chore: deprecate pytest-cov
+- chore: two venvs. docs py310. Everything else py39
+- docs: commented out Makefile catch all target
+- docs: py39 --> py310
+
 .. _changes_1-0-0.post2:
 
 Version 1-0-0.post2 — 2024-09-20

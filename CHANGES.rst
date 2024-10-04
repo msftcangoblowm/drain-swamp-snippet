@@ -21,6 +21,8 @@ Changelog
 Version 1-0-1 — 2024-10-04
 --------------------------------
 
+- ci: bump pypa/gh-action-pypi-publish to release/v1
+- ci: bump actions/check to v4.2.0
 - fix: dependency updating python version sensitive
 - chore: deprecate pytest-cov
 - chore: two venvs. docs py310. Everything else py39

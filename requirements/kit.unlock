@@ -1,0 +1,7 @@
+auditwheel
+build
+cibuildwheel
+colorama>=0.4.6 ;platform_system=="Windows"
+setuptools
+pyproject-hooks>=1.2.0
+tomli==2.0.1; python_version<"3.11"

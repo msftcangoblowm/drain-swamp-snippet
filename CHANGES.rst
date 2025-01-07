@@ -14,6 +14,13 @@ Changelog
    Commit items for NEXT VERSION
    ..............................
 
+   - ci: bump actions versions
+   - chore(Makefile): remove upgrade requirement targets
+   - tests: add pytest-logging-strict support
+   - chore: configure wreck support
+   - chore(pyproject.toml): configure dynamic optional dependencies
+   - chore(pyproject.toml): configure logging-strict query
+
 .. scriv-start-here
 
 .. _changes_1-0-1:

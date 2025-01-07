@@ -1,7 +1,7 @@
 """
 .. moduleauthor:: Dave Faulkmore <https://mastodon.social/@msftcangoblowme>
 
-drain-swamp pytest conftest.py
+drain-swamp-snippet pytest conftest.py
 """
 
 import re
@@ -12,10 +12,9 @@ from typing import Any
 
 import pytest
 
-from .logger import (  # noqa: F401
-    get_logger,
-    has_logging_occurred,
-)
+pytest_plugins = [
+    "logging_strict",
+]
 
 
 class FileRegression:
@@ -152,3 +151,42 @@ def pytest_runtest_makereport(item, call):
     test_report = (yield).get_result()
     if test_report.when == "call":
         item.test_report = test_report
+
+
+@pytest.fixture()
+def has_logging_occurred(caplog):
+    """Display caplog capture text.
+
+    Usage
+
+    .. code-block: text
+
+       import pytest
+
+       from drain_swamp_snippet.constants import g_app_name
+
+       @pytest.mark.logging_package_name(g_app_name)
+       def test_something(logging_strict, caplog, has_logging_occurred):
+           t_two = logging_strict()
+           logger, loggers = t_two
+
+           assert has_logging_occurred()
+
+    """
+
+    def _func() -> bool:
+        """Check if there is at least one log message. Print log messages.
+
+        :returns: True if logging occurred otherwise False
+        :rtype: bool
+        """
+        print("\nCAPLOG:")
+        output = caplog.text.rstrip("\n").split(sep="\n")
+        if output == [""]:
+            print("Nothing captured")
+            return False
+        for i in range(len(output)):
+            print(f"{i}: {output[i]}")
+        return True
+
+    return _func

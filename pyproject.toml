@@ -4,6 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "drain-swamp-snippet"
+dynamic = [
+    "optional-dependencies",
+]
+dependencies = []
 license = {file = "LICENSE"}
 version = "1.0.1"
 description = "Change portions of static config files"
@@ -31,25 +35,8 @@ classifiers = [
 authors = [  # Contact by mastodon please
     {name = "Dave Faulkmore", email = "faulkmore@protonmail.com"},
 ]
-dependencies = []
-
-[project.optional-dependencies]
-dev = [
-    "black",
-    "blackdoc",
-    "isort",
-    "flake8",
-    "flake8-pyi",
-    "flake8-pyproject",
-    "mypy",
-    "coverage",
-    "twine",
-    "validate-pyproject",
-    "pytest>=7.1",
-    "pytest-cov",
-    "pytest-regressions",
-    "types-setuptools",
-]
+[tool.setuptools.dynamic]
+optional-dependencies.dev = { file = ['requirements/dev.lock'] }
 
 [project.urls]
 "Changes" = 'https://raw.githubusercontent.com/msftcangoblowm/drain-swamp-snippet/master/CHANGES.rst'
@@ -142,6 +129,13 @@ filterwarnings = [
 log_format = "%(asctime)s %(levelname)s %(message)s"
 log_date_format = "%Y-%m-%d %H:%M:%S"
 
+logging_strict_yaml_package_name = 'logging_strict'
+logging_strict_package_data_folder_start = 'configs'
+logging_strict_category = 'worker'
+logging_strict_genre = 'mp'
+logging_strict_flavor = 'asz'
+logging_strict_version_no = '1'
+
 [tool.interrogate]
 color = true
 exclude = [
@@ -201,3 +195,23 @@ doctest_show_successes = false
 doctest_test_doctest_blocks = "Yes please!"
 nitpicky = true
 autodoc_typehints = 'signature'
+
+[[tool.venvs]]
+venv_base_path = '.venv'
+reqs = [
+    'requirements/dev',
+    'requirements/kit',
+    'requirements/pip',
+    'requirements/pip-tools',
+    'requirements/prod',
+    'requirements/manage',
+    'requirements/mypy',
+    'requirements/tox',
+]
+
+[[tool.venvs]]
+venv_base_path = '.doc/.venv'
+reqs = [
+    'docs/pip-tools',
+    'docs/requirements',
+]

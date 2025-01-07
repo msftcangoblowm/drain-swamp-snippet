@@ -5,7 +5,7 @@
 
 pip<24.2
 sphinx>=8
-sphinx-external-toc-strict>=2.0.0.post1
+sphinx-external-toc-strict>=2.0.2
 
 sphinx-pyproject
 sphinx-autobuild

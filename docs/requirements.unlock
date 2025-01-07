@@ -1,0 +1,12 @@
+pip<24.2
+scriv
+sphinx-autobuild
+sphinx-copybutton
+sphinx-external-toc-strict>=2.0.2
+sphinx-favicon
+sphinx-paramlinks
+sphinx-pyproject
+sphinx-tabs
+sphinx>=8
+sphinx_design
+sphobjinv

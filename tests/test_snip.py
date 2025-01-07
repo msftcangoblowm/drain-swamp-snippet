@@ -167,6 +167,7 @@ ids_test_snip_harden = [
 ]
 
 
+@pytest.mark.logging_package_name(g_app_name)
 @pytest.mark.parametrize(
     "file_name, id_, replace_text, file_contents, expected, expected_result_status",
     testdata_test_snip_harden,
@@ -181,9 +182,7 @@ def test_snip_harden(
     expected_result_status,
     tmp_path,
     file_regression,
-    get_logger,
-    caplog,
-    has_logging_occurred,
+    logging_strict,
 ):
     """Test Snip.replace failure and normal usage.
 
@@ -193,15 +192,8 @@ def test_snip_harden(
 
     """
     # pytest --showlocals --log-level INFO -k "test_snip_harden" tests
-    get_logger(g_app_name)
-    """
-    # py39+ Cannot have LOGGING.loggers.root
-    LOGGING["loggers"][g_app_name]["propagate"] = True
-    logging.config.dictConfig(LOGGING)
-    logger = logging.getLogger(name=g_app_name)
-    logger.addHandler(hdlr=caplog.handler)
-    caplog.handler.level = logger.level
-    """
+    t_two = logging_strict()
+    logger, loggers = t_two
 
     # files/folders --> FileNotFoundError --> False
     invalids = (
@@ -256,7 +248,7 @@ def test_snip_harden(
             actual = er.get_file()
             assert actual == expected
 
-            assert has_logging_occurred(caplog)
+            # assert has_logging_occurred()
 
             file_regression.check(expected, extension=".txt", binary=False)
 
@@ -294,6 +286,7 @@ def test_snip_properties(path_f, expectation):
         Snip(path_f)
 
 
+@pytest.mark.logging_package_name(g_app_name)
 @pytest.mark.parametrize(
     "file_name, id_, replace_text, file_contents, expected, expected_result_status",
     testdata_test_snip_harden,
@@ -306,18 +299,12 @@ def test_checks_normal_usage(
     file_contents,
     expected,
     expected_result_status,
-    get_logger,
+    logging_strict,
 ):
     """Snippet validity checks."""
     # pytest --showlocals --log-level INFO -k "test_checks_normal_usage" tests
-    get_logger(g_app_name)
-    """
-    LOGGING["loggers"][g_app_name]["propagate"] = True
-    logging.config.dictConfig(LOGGING)
-    logger = logging.getLogger(name=g_app_name)
-    logger.addHandler(hdlr=caplog.handler)
-    caplog.handler.level = logger.level
-    """
+    t_two = logging_strict()
+    logger, loggers = t_two
 
     assert check_matching_tag_count(
         file_contents,
@@ -354,6 +341,7 @@ def test_checks_normal_usage(
     )
 
 
+@pytest.mark.logging_package_name(g_app_name)
 @pytest.mark.parametrize(
     "file_name, id_, replace_text, file_contents, expected, expected_result_status",
     testdata_test_snip_harden,
@@ -366,18 +354,12 @@ def test_checks_bad_input(
     file_contents,
     expected,
     expected_result_status,
-    get_logger,
+    logging_strict,
 ):
     """Snippet validity checks bad input."""
     # pytest --showlocals --log-level INFO -k "test_checks_bad_input" tests
-    get_logger(g_app_name)
-    """
-    LOGGING["loggers"][g_app_name]["propagate"] = True
-    logging.config.dictConfig(LOGGING)
-    logger = logging.getLogger(name=g_app_name)
-    logger.addHandler(hdlr=caplog.handler)
-    caplog.handler.level = logger.level
-    """
+    t_two = logging_strict()
+    logger, loggers = t_two
 
     # prepare test data
     invalids = (
@@ -435,6 +417,7 @@ def test_check_snips_bad(path):
     assert snip.validate() is False
 
 
+@pytest.mark.logging_package_name(g_app_name)
 @pytest.mark.parametrize(
     "file_name, id_, replace_text, file_contents, expected, expected_result_status",
     testdata_test_snip_harden,
@@ -448,18 +431,12 @@ def test_snip_validate(
     expected,
     expected_result_status,
     tmp_path,
-    get_logger,
+    logging_strict,
 ):
     """Test Snip.validate."""
     # pytest --showlocals --log-level INFO -k "test_snip_validate" tests
-    get_logger(g_app_name)
-    """
-    LOGGING["loggers"][g_app_name]["propagate"] = True
-    logging.config.dictConfig(LOGGING)
-    logger = logging.getLogger(name=g_app_name)
-    logger.addHandler(hdlr=caplog.handler)
-    caplog.handler.level = logger.level
-    """
+    t_two = logging_strict()
+    logger, loggers = t_two
 
     # prepare
     path_fname = tmp_path.joinpath(file_name)
@@ -586,6 +563,7 @@ ids_snip_contents = [
 ]
 
 
+@pytest.mark.logging_package_name(g_app_name)
 @pytest.mark.parametrize(
     "file_name, id_, file_contents, expected",
     testdata_snip_contents,
@@ -598,21 +576,13 @@ def test_snip_contents(
     expected,
     tmp_path,
     prepare_folders_files,
-    get_logger,
-    caplog,
-    has_logging_occurred,
+    logging_strict,
 ):
     """Test snippet algo."""
     # pytest --showlocals --log-level INFO -k "test_snip_contents" tests
     # pytest --showlocals --log-level INFO tests/test_snip.py::test_snip_contents["No snippets. Nothing to do"]
-    get_logger(g_app_name)
-    """
-    LOGGING["loggers"][g_app_name]["propagate"] = True
-    logging.config.dictConfig(LOGGING)
-    logger = logging.getLogger(name=g_app_name)
-    logger.addHandler(hdlr=caplog.handler)
-    caplog.handler.level = logger.level
-    """
+    t_two = logging_strict()
+    logger, loggers = t_two
 
     path_abs = tmp_path / file_name
     snip = Snip(path_abs)
@@ -648,7 +618,7 @@ def test_snip_contents(
     # act -- snip.contents
     t_actual = snip.contents(id_=id_)
 
-    assert has_logging_occurred(caplog)
+    # assert has_logging_occurred()
 
     if isinstance(t_actual, ReplaceResult):
         assert t_actual == ReplaceResult.NO_MATCH

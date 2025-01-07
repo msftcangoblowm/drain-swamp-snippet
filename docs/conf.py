@@ -20,13 +20,13 @@ version_xyz = f"{v.major}.{v.minor}.{v.micro}"
 version_long = str(v)
 
 # drain-swamp is a drain-swamp-snippet implementation for editting the below
-copyright = "2024–2024, Dave Faulkmore"
+copyright = "2024–2025, Dave Faulkmore"
 # The short X.Y.Z version.
 version = version_xyz
 # The full version, including alpha/beta/rc tags.
 # release = release
 # The date of release, in "monthname day, year" format.
-release_date = "October 4, 2024"
+release_date = "January 7, 2025"
 
 config = SphinxConfig(
     # Path(__file__).parent.parent.joinpath("pyproject.toml"),

@@ -49,8 +49,16 @@ help:					## (Default) Display this help -- Always up to date
 ##@ Testing
 
 .PHONY: pre-commit
-pre-commit:				## Run checks found in .pre-commit-config.yaml
-	@pre-commit run --all-files
+pre-commit: private target_tty = $(if $(show),1,0)
+pre-commit:				## Run pre-commit -- make [show=1] pre-commit
+ifeq ($(is_venv),1)
+	@out=$$(PRE_COMMIT_COLOR=never SKIP=pyright pre-commit run --all-files ||:)
+	if [[ $(target_tty) -eq 1 ]]; then
+	echo "$$out" | tee /tmp/out.txt
+	else
+	echo "$$out" > /tmp/out.txt
+	fi
+endif
 
 #--strict is on
 .PHONY: mypy
@@ -82,20 +90,6 @@ ifeq ($(is_venv),1)
 	$(VENV_BIN_PYTHON) -m flake8 tests/
 endif
 
-# --cov-report=xml
-# Dependencies: pytest, pytest-cov, pytest-regressions
-# make [v=1] coverage
-# @$(VENV_BIN)/pytest --showlocals --cov=drain_swamp_snippet --cov-report=term-missing --cov-config=pyproject.toml $(verbose_text) tests
-.PHONY: coverage
-coverage: private verbose_text = $(if $(v),"--verbose")
-coverage:				## Run tests, generate coverage reports -- make [v=1] coverage
-ifeq ($(is_venv),1)
-	-@$(VENV_BIN_PYTHON) -m coverage erase
-	@$(VENV_BIN_PYTHON) -m coverage run --parallel -m pytest --showlocals tests
-	$(VENV_BIN_PYTHON) -m coverage combine
-	$(VENV_BIN_PYTHON) -m coverage report --fail-under=95
-endif
-
 ##@ Kitting
 REPO_OWNER := msftcangoblowm/drain-swamp-snippet
 REPO := $(REPO_OWNER)/drain_swamp_snippet
@@ -103,6 +97,31 @@ REPO := $(REPO_OWNER)/drain_swamp_snippet
 .PHONY: relbranch
 relbranch:				## Create the branch for releasing (see howto.txt)
 	@git switch -c $(REPO_OWNER)/release-$$(date +%Y%m%d)
+
+##@ GNU Make standard targets
+
+# --cov-report=xml
+# Dependencies: pytest, pytest-cov, pytest-regressions
+# make [v=1] coverage
+# @$(VENV_BIN)/pytest --showlocals --cov=drain_swamp_snippet --cov-report=term-missing --cov-config=pyproject.toml $(verbose_text) tests
+.PHONY: check
+check: private target_tty = $(if $(show),1,0)
+check: private verbose_text = $(if $(v),"--verbose")
+check:				## Run tests and coverage -- make [v=1] [show=1] check
+ifeq ($(is_venv),1)
+	-@$(VENV_BIN_PYTHON) -m coverage erase
+	if [[ $(target_tty) -eq 1 ]]; then
+	$(VENV_BIN_PYTHON) -m coverage run --parallel -m pytest --showlocals tests
+	else
+	$(VENV_BIN_PYTHON) -m coverage run --parallel -m pytest --showlocals tests > /tmp/out_tests.err
+	fi
+	$(VENV_BIN_PYTHON) -m coverage combine
+	if [[ $(target_tty) -eq 1 ]]; then
+	$(VENV_BIN_PYTHON) -m coverage report --fail-under=95
+	else
+	$(VENV_BIN_PYTHON) -m coverage report --fail-under=95 > /tmp/out.report
+	fi
+endif
 
 .PHONY: install
 install: override usage := make [force=1]

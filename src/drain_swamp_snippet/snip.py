@@ -9,32 +9,14 @@ Be able to search and replace editable regions within text files
 
    Modules exports
 
-.. py:data:: _logger
-   :type: logging.Logger
-
-   Module level logger
-
-.. py:data:: mod_dotted_path
-   :type: str
-   :value: "drain_swamp_snippet.snip"
-
-   Module dotted path
-
-.. py:data:: is_module_debug
-   :type: bool
-
-   Module level debug flag
-
 """
-
-from __future__ import annotations
 
 import logging
 import re
 import string
 import sys
 from enum import (
-    Enum,
+    IntEnum,
     auto,
 )
 from functools import partial
@@ -52,12 +34,15 @@ __all__ = (
     "Snip",
 )
 
+#: str: Module dotted path
 mod_dotted_path = f"{g_app_name}.snip"
+#: logging.Logger: Module level logger
 _logger = logging.getLogger()
+#: bool: Module level debug flag
 is_module_debug = False
 
 
-class ReplaceResult(Enum):
+class ReplaceResult(IntEnum):
     """Snippet replace result possibilities.
 
     For membership checking, equality comparison is supported
@@ -122,12 +107,12 @@ def check_matching_tag_count(
         token_end = Snip.TOKEN_END
         contents = f"{token_start}{token_end}{token_start}{token_end}"
 
-        is_ok = check_matching_tag_count(
+        is_token_pairs = check_matching_tag_count(
             contents,
             token_start,
             token_end,
         )
-        assert is_ok
+        assert is_token_pairs
 
     :param contents: file contents to be validated
     :type contents: str
@@ -143,18 +128,14 @@ def check_matching_tag_count(
         start_count = contents.count(token_start)
         end_count = contents.count(token_end)
 
-        if is_module_debug:  # pragma: no cover
+        if is_module_debug:  # pragma: no cover  # pragma: no branch
             _logger.debug(f"{fcn_path} start token count: {start_count}")
             _logger.debug(f"{fcn_path} end token count: {end_count}")
-        else:  # pragma: no cover
-            pass
 
         is_tag_count_match = start_count == end_count
 
-        if is_module_debug:  # pragma: no cover
+        if is_module_debug:  # pragma: no cover  # pragma: no branch
             _logger.debug(f"{fcn_path} token counts match: {is_tag_count_match}")
-        else:  # pragma: no cover
-            pass
 
         ret = is_tag_count_match
     else:
@@ -197,19 +178,17 @@ def check_not_nested_or_out_of_order(
     if is_ok(contents) and is_ok(token_start) and is_ok(token_end):
         idx_current = 0
         found_next = True
-        while found_next is True:
+        while found_next:
             idx_start = contents.find(token_start, idx_current)
             idx_end = contents.find(token_end, idx_current)
 
             # Not errors:
             # - no tag pairs at all
             # - no next tags
-            is_no_more_tags = idx_start == -1 and idx_end == -1
-            if is_no_more_tags:
+            is_no_more_tags = idx_start == -1 == idx_end
+            if is_no_more_tags:  # pragma: no branch
                 found_next = False
                 continue
-            else:  # pragma: no cover
-                pass
 
             # is_end_at_beginning = idx_end != -1 and idx_end == idx_current
             is_no_start_tag = idx_start == -1 and idx_end != -1
@@ -239,14 +218,12 @@ def check_not_nested_or_out_of_order(
         # either no contents, no start token, or no end token
         ret = False
 
-        if is_module_debug:  # pragma: no cover
+        if is_module_debug:  # pragma: no cover  # pragma: no branch
             msg_info = (
                 f"{fcn_path} Either no contents, no start token, or no "
                 "end token provided"
             )
             _logger.info(msg_info)
-        else:  # pragma: no cover
-            pass
 
     return ret
 
@@ -433,22 +410,20 @@ class Snip:
         """
         cls = type(self)
         meth_path = f"{mod_dotted_path}.{cls.__name__}.get_file"
-        if not self.is_file_ok() and is_module_debug:  # pragma: no cover
+        if (
+            not self.is_file_ok() and is_module_debug
+        ):  # pragma: no cover  # pragma: no branch
             msg_warn = f"{meth_path} Cannot update nonexistent file, {self.path_file!r}"
             _logger.warning(msg_warn)
-        else:  # pragma: no cover
-            pass
 
         if self.is_file_ok():
             ret = self.path_file.read_text(encoding="utf-8")
 
-            if ret is None or len(ret) == 0:
+            if ret is None or len(ret) == 0:  # pragma: no branch
                 # Expecting file to not be empty
                 # Also expecting to contain editable regions
                 msg_exc = "Expecting file to be non-empty"
                 raise ValueError(msg_exc)
-            else:  # pragma: no cover
-                pass
         else:  # pragma: no cover
             # file not ok
             msg_exc = (
@@ -492,17 +467,15 @@ class Snip:
         cls = type(self)
         meth_path = f"{mod_dotted_path}.{cls.__name__}.replace"
 
-        if replacement is None or not isinstance(replacement, str):
+        if replacement is None or not isinstance(replacement, str):  # pragma: no branch
             msg_exc = "Unsupported type, replacement contents must be a str"
             raise TypeError(msg_exc)
 
         id_ = sanitize_id(id_)
-        if is_module_debug:  # pragma: no cover
+        if is_module_debug:  # pragma: no cover  # pragma: no branch
             _logger.info(f"{meth_path} id_ (user input; filtered): {id_}")
             msg_info = f"{meth_path} replacement (user input filtered): {replacement!r}"
             _logger.info(msg_info)
-        else:  # pragma: no cover
-            pass
 
         def replace_fcn(matchobj):
             """inline func for snippets. Which are editable regions within utf-8 text
@@ -569,19 +542,17 @@ class Snip:
 
             .. seealso::
 
-               `re.sub <https://docs.python.org/3/library/re.html#re.sub>`_
+               :py:func:`re.sub`
 
                `regex tester web app <https://regexr.com/>`_
 
             """
-            if is_module_debug:  # pragma: no cover
+            if is_module_debug:  # pragma: no cover  # pragma: no branch
                 _logger.debug(f"matched region:   {matchobj.group(0)}")
                 _logger.debug(f"current id:       {matchobj.group(1)}")
                 _logger.debug(f"current contents: {matchobj.group(2)}")
                 _logger.debug(f"target id:        {id_}")
                 _logger.debug(f"replacement: {replacement!r}")
-            else:  # pragma: no cover
-                pass
 
             current_id = matchobj.group(1)
             is_target_have_id = len(id_) != 0
@@ -591,39 +562,29 @@ class Snip:
                 # both have id and match
                 ret = f"{token_start} {id_}\n{replacement}\n{token_end}"
 
-                if is_module_debug:  # pragma: no cover
+                if is_module_debug:  # pragma: no cover  # pragma: no branch
                     msg_debug = "both have id; match"
                     _logger.debug(msg_debug)
-                else:  # pragma: no cover
-                    pass
             elif is_target_have_id and is_current_have_id and current_id != id_:
                 # both have id; no match
-                if is_module_debug:  # pragma: no cover
+                if is_module_debug:  # pragma: no cover  # pragma: no branch
                     msg_debug = "both have id; no match --> return unmodified"
                     _logger.debug(msg_debug)
-                else:  # pragma: no cover
-                    pass
                 ret = matchobj.group(0)
             elif not is_target_have_id and not is_current_have_id:
                 ret = f"{token_start}\n{replacement}\n{token_end}"
-                if is_module_debug:  # pragma: no cover
+                if is_module_debug:  # pragma: no cover  # pragma: no branch
                     msg_debug = "both no id; match"
                     _logger.debug(msg_debug)
-                else:  # pragma: no cover
-                    pass
             else:
-                if is_module_debug:  # pragma: no cover
+                if is_module_debug:  # pragma: no cover  # pragma: no branch
                     msg_debug = "not a match --> return unmodified"
                     _logger.debug(msg_debug)
-                else:  # pragma: no cover
-                    pass
                 ret = matchobj.group(0)
 
-            if is_module_debug:  # pragma: no cover
+            if is_module_debug:  # pragma: no cover  # pragma: no branch
                 msg_debug = f"ret: {ret}"
                 _logger.debug(msg_debug)
-            else:  # pragma: no cover
-                pass
 
             return ret
 
@@ -636,10 +597,8 @@ class Snip:
             # snippet_existing = t_snippet_existing[0]
             snippet_co_actual = t_snippet_existing[1]
             # If snippet_co not provided and only one snippet, use inferred snippet_co
-            if self.is_infer:
+            if self.is_infer:  # pragma: no branch
                 id_ = snippet_co_actual
-            else:  # pragma: no cover
-                pass
 
             # file contents
             text_existing = self._contents
@@ -649,20 +608,16 @@ class Snip:
             token_end = cls.TOKEN_END
             new_text = re.sub(cls.PATTERN_W_ID, replace_fcn, text_existing)
 
-            if is_module_debug:  # pragma: no cover
+            if is_module_debug:  # pragma: no cover  # pragma: no branch
                 msg_info = f"{meth_path} text (after re.sub): {new_text}"
                 _logger.info(msg_info)
-            else:  # pragma: no cover
-                pass
 
             is_changed = new_text != text_existing
 
             if is_changed:
-                if is_module_debug:  # pragma: no cover
+                if is_module_debug:  # pragma: no cover  # pragma: no branch
                     msg_info = f"{meth_path} Updating {self.path_file!r}"
                     _logger.info(msg_info)
-                else:  # pragma: no cover
-                    pass
                 self.path_file.write_text(new_text)
                 ret = ReplaceResult.REPLACED
             else:  # pragma: no cover
@@ -711,7 +666,7 @@ class Snip:
         ret = all([validator() for validator in validators])
 
         # file contents --> buffer, so don't have to get_file twice
-        if ret is True:
+        if ret:
             self._contents = contents
         else:
             msg_exc = "Validation checks fail"
@@ -735,36 +690,34 @@ class Snip:
         is_invalid_file = not is_valid
         is_checks_fail = is_valid and self._contents is None
         if is_invalid_file or is_checks_fail:
-            if is_module_debug:  # pragma: no cover
+            if is_module_debug:  # pragma: no cover  # pragma: no branch
                 msg_info = (
                     f"{meth_path} Validation issue. Check file: {self.path_file!r}"
                 )
                 _logger.info(msg_info)
-            else:  # pragma: no cover
-                pass
 
-            return ReplaceResult.VALIDATE_FAIL
+            ret = ReplaceResult.VALIDATE_FAIL
+        else:
+            # str, not None
+            contents = self._contents
 
-        # str, not None
-        contents = self._contents
+            pattern = cls.PATTERN_W_ID
+            prog = re.compile(pattern)
 
-        pattern = cls.PATTERN_W_ID
-        prog = re.compile(pattern)
+            # snippet_co can be used multiple times, so not a set
+            #    id, snippet contents
+            seq_ret = [
+                (m.group(1), m.group(2))
+                for m in prog.finditer(contents)
+                if m is not None
+            ]
 
-        # snippet_co can be used multiple times, so not a set
-        seq_ret = []
-        for m in prog.finditer(contents):
-            if m is not None:
-                # id, snippet contents
-                seq_ret.append((m.group(1), m.group(2)))
-            else:  # pragma: no cover
-                # no matches
-                pass
+            if not seq_ret:
+                ret = ReplaceResult.NO_MATCH
+            else:
+                ret = seq_ret
 
-        if len(seq_ret) == 0:
-            return ReplaceResult.NO_MATCH
-
-        return seq_ret
+        return ret
 
     def print(self):
         """Human readable summary of snippets.
@@ -836,7 +789,7 @@ class Snip:
         id_ = sanitize_id(id_)
 
         snippets = self.snippets
-        if isinstance(snippets, ReplaceResult):
+        if isinstance(snippets, ReplaceResult):  # pragma: no branch
             return snippets
 
         seq_ret = []
@@ -856,11 +809,11 @@ class Snip:
             for t_snip in snippets:
                 snippet_co = t_snip[0]
                 snippet_contents = t_snip[1]
-                if snippet_co == id_:
+                if snippet_co == id_:  # pragma: no branch
                     seq_ret.append((snippet_contents, snippet_co))
 
             # ReplaceResult.NO_MATCH already checked for
-            if len(seq_ret) == 0:
+            if not seq_ret:
                 ret = ReplaceResult.NO_MATCH
             else:
                 ret = seq_ret[0]

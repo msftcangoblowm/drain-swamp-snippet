@@ -24,6 +24,7 @@ Integration test
 import contextlib
 import io
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 
@@ -34,6 +35,18 @@ from drain_swamp_snippet.snip import (
     check_matching_tag_count,
     check_not_nested_or_out_of_order,
 )
+
+if TYPE_CHECKING:
+    import logging
+    from collections.abc import (
+        Callable,
+        MutableSet,
+        Sequence,
+    )
+
+    from .fr import FileRegression
+    from .typing_only import DOES_NOT_OR_DOES
+
 
 testdata_test_snip_harden = [
     (
@@ -174,16 +187,16 @@ ids_test_snip_harden = [
     ids=ids_test_snip_harden,
 )
 def test_snip_harden(
-    file_name,
-    id_,
-    replace_text,
-    file_contents,
-    expected,
-    expected_result_status,
-    tmp_path,
-    file_regression,
-    logging_strict,
-):
+    file_name: str,
+    id_: str,
+    replace_text: str,
+    file_contents: str,
+    expected: str,
+    expected_result_status: int,
+    tmp_path: Path,
+    file_regression: "FileRegression",
+    logging_strict: "Callable[[], tuple[logging.Logger, list[logging.Logger]] | None]",
+) -> None:
     """Test Snip.replace failure and normal usage.
 
     .. seealso::
@@ -253,33 +266,30 @@ def test_snip_harden(
             file_regression.check(expected, extension=".txt", binary=False)
 
 
-testdata_snip_properties = (
-    (
-        None,
-        pytest.raises(TypeError),
-    ),
-    (
-        1.12345,
-        pytest.raises(TypeError),
-    ),
-    (
-        1,
-        pytest.raises(TypeError),
-    ),
-)
-ids_snip_properties = (
-    "unsupported None",
-    "unsupported type float",
-    "unsupported type int",
-)
-
-
 @pytest.mark.parametrize(
     "path_f, expectation",
-    testdata_snip_properties,
-    ids=ids_snip_properties,
+    (
+        pytest.param(
+            None,
+            pytest.raises(TypeError),
+            id="unsupported-None",
+        ),
+        pytest.param(
+            1.12345,
+            pytest.raises(TypeError),
+            id="unsupported-type-float",
+        ),
+        pytest.param(
+            1,
+            pytest.raises(TypeError),
+            id="unsupported type int",
+        ),
+    ),
 )
-def test_snip_properties(path_f, expectation):
+def test_snip_properties(
+    path_f: "str | Path | None | float | int",
+    expectation: "DOES_NOT_OR_DOES",
+) -> None:
     """Test Snip properties."""
     # pytest --showlocals --log-level INFO -k "test_properties" tests
     with expectation:
@@ -293,14 +303,14 @@ def test_snip_properties(path_f, expectation):
     ids=ids_test_snip_harden,
 )
 def test_checks_normal_usage(
-    file_name,
-    id_,
-    replace_text,
-    file_contents,
-    expected,
-    expected_result_status,
-    logging_strict,
-):
+    file_name: str,
+    id_: str,
+    replace_text: str,
+    file_contents: str,
+    expected: str,
+    expected_result_status: int,
+    logging_strict: "Callable[[], tuple[logging.Logger, list[logging.Logger]] | None]",
+) -> None:
     """Snippet validity checks."""
     # pytest --showlocals --log-level INFO -k "test_checks_normal_usage" tests
     t_two = logging_strict()
@@ -348,14 +358,14 @@ def test_checks_normal_usage(
     ids=ids_test_snip_harden,
 )
 def test_checks_bad_input(
-    file_name,
-    id_,
-    replace_text,
-    file_contents,
-    expected,
-    expected_result_status,
-    logging_strict,
-):
+    file_name: str,
+    id_: str,
+    replace_text: str,
+    file_contents: str,
+    expected: str,
+    expected_result_status: int,
+    logging_strict: "Callable[[], tuple[logging.Logger, list[logging.Logger]] | None]",
+) -> None:
     """Snippet validity checks bad input."""
     # pytest --showlocals --log-level INFO -k "test_checks_bad_input" tests
     t_two = logging_strict()
@@ -396,7 +406,7 @@ SNIPS_BAD = list(Path(__file__).parent.joinpath("_bad_snips").glob("*.txt"))
     SNIPS_BAD,
     ids=[path.name.rsplit(".", 1)[0] for path in SNIPS_BAD],
 )
-def test_check_snips_bad(path):
+def test_check_snips_bad(path: Path) -> None:
     """Snips gone wrong."""
     # pytest --showlocals --log-level INFO -k "test_check_snips_bad" tests
 
@@ -424,14 +434,14 @@ def test_check_snips_bad(path):
     ids=ids_test_snip_harden,
 )
 def test_snip_validate(
-    file_name,
-    id_,
-    replace_text,
-    file_contents,
-    expected,
-    expected_result_status,
-    tmp_path,
-    logging_strict,
+    file_name: str,
+    id_: str,
+    replace_text: str,
+    file_contents: str,
+    expected: str,
+    expected_result_status: int,
+    tmp_path: Path,
+    logging_strict: "Callable[[], tuple[logging.Logger, list[logging.Logger]] | None]",
 ):
     """Test Snip.validate."""
     # pytest --showlocals --log-level INFO -k "test_snip_validate" tests
@@ -473,114 +483,107 @@ def test_snip_validate(
             assert is_valid is False
 
 
-testdata_snip_contents = [
-    (
-        "with_id_key_no_snippet.txt",
-        "asdf",
-        "zzzzzzzzzzzzz\nzzzzzzzzzz\nzzzzzzzzzzzzz\n",
-        ReplaceResult.NO_MATCH,
-    ),
-    (
-        "with_id_key_no_key.txt",
-        "asdf",
-        "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
-        ReplaceResult.NO_MATCH,
-    ),
-    (
-        "with_id_no_key_key.txt",
-        "",
-        "zzzzzzzzzzzzz\n# @@@ editable george\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
-        "blah blah blah",
-    ),
-    (
-        "with_id.txt",
-        "asdf",
-        "zzzzzzzzzzzzz\n# @@@ editable asdf\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
-        "blah blah blah",
-    ),
-    (
-        "with_id_snippet_empty.txt",
-        "asdf",
-        "zzzzzzzzzzzzz\n# @@@ editable asdf\n\n# @@@ end\nzzzzzzzzzzzzz\n",
-        "",
-    ),
-    (
-        "without_id_empty_str.txt",
-        "",
-        "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
-        "blah blah blah",
-    ),
-    (
-        "without_id_none.txt",
-        None,
-        "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
-        "blah blah blah",
-    ),
-    (
-        "without_id_not_str.txt",
-        1.12345,
-        "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
-        "blah blah blah",
-    ),
-    (
-        "without_id_excess_whitespace.txt",
-        "    ",
-        "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
-        "blah blah blah",
-    ),
-    (
-        "with_id_match_2nd.txt",
-        "george",
-        "zzzzzzzzzzzzz\n# @@@ editable asdf\nblah blah blah\n# @@@ end\nzzzzzz\n# @@@ editable george\nhey there ted\n# @@@ end\nzzzzzzz\n",
-        "hey there ted",
-    ),
-    (
-        "with_id_match_1st.txt",
-        "asdf",
-        "zzzzzzzzzzzzz\n# @@@ editable asdf\nblah blah blah\n# @@@ end\nzzzzzz\n# @@@ editable george\nhey there ted\n# @@@ end\nzzzzzzz\n",
-        "blah blah blah",
-    ),
-    (
-        "with_id_match_1st_and_3rd.txt",
-        "asdf",
-        "zzzzzzzzzzzzz\n# @@@ editable asdf\nblah blah blah\n# @@@ end\nzzzzzz\n# @@@ editable george\nhey there ted\n# @@@ end\nzzzzzzz\n# @@@ editable asdf\nlol lol lol\n# @@@ end\noh ok then",
-        "blah blah blah",
-    ),
-]
-ids_snip_contents = [
-    "No snippets. Nothing to do",
-    "one snip. with id. No key",
-    "one snip. with id. No key. Infers key",
-    "one snip. with id",
-    "one snip. with id. snippet empty",
-    "one snip. without id empty str. Infers key",
-    "one snip. without id empty none/ Infers key",
-    "one snip. without id empty not a str. Infers key",
-    "one snip. without id empty excess whitespace. Infers key",
-    "two snips. both have id. match 2nd",
-    "two snips. both have id. match 1st",
-    "three snips. All have id. match 1st and 3rd",
-]
-
-
 @pytest.mark.logging_package_name(g_app_name)
 @pytest.mark.parametrize(
     "file_name, id_, file_contents, expected",
-    testdata_snip_contents,
-    ids=ids_snip_contents,
+    (
+        pytest.param(
+            "with_id_key_no_snippet.txt",
+            "asdf",
+            "zzzzzzzzzzzzz\nzzzzzzzzzz\nzzzzzzzzzzzzz\n",
+            ReplaceResult.NO_MATCH,
+            id="No-snippets.-Nothing-to-do",
+        ),
+        pytest.param(
+            "with_id_key_no_key.txt",
+            "asdf",
+            "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
+            ReplaceResult.NO_MATCH,
+            id="one-snip.-with-id.-No-key",
+        ),
+        pytest.param(
+            "with_id_no_key_key.txt",
+            "",
+            "zzzzzzzzzzzzz\n# @@@ editable george\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
+            "blah blah blah",
+            id="one-snip.-with-id.-No-key.-Infers-key",
+        ),
+        pytest.param(
+            "with_id.txt",
+            "asdf",
+            "zzzzzzzzzzzzz\n# @@@ editable asdf\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
+            "blah blah blah",
+            id="one=snip.-with-id",
+        ),
+        pytest.param(
+            "with_id_snippet_empty.txt",
+            "asdf",
+            "zzzzzzzzzzzzz\n# @@@ editable asdf\n\n# @@@ end\nzzzzzzzzzzzzz\n",
+            "",
+            id="one-snip.-with-id.-snippet-empty",
+        ),
+        pytest.param(
+            "without_id_empty_str.txt",
+            "",
+            "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
+            "blah blah blah",
+            id="one-snip.-without-id-empty-str.-Infers-key",
+        ),
+        pytest.param(
+            "without_id_none.txt",
+            None,
+            "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
+            "blah blah blah",
+            id="one-snip.-without-id-empty-none-Infers-key",
+        ),
+        pytest.param(
+            "without_id_not_str.txt",
+            1.12345,
+            "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
+            "blah blah blah",
+            id="one-snip.-without-id-empty-not-a-str.-Infers-key",
+        ),
+        pytest.param(
+            "without_id_excess_whitespace.txt",
+            "    ",
+            "zzzzzzzzzzzzz\n# @@@ editable\nblah blah blah\n# @@@ end\nzzzzzzzzzzzzz\n",
+            "blah blah blah",
+            id="one-snip.-without-id-empty-excess-whitespace.-Infers-key",
+        ),
+        pytest.param(
+            "with_id_match_2nd.txt",
+            "george",
+            "zzzzzzzzzzzzz\n# @@@ editable asdf\nblah blah blah\n# @@@ end\nzzzzzz\n# @@@ editable george\nhey there ted\n# @@@ end\nzzzzzzz\n",
+            "hey there ted",
+            id="two-snips.-both-have-id.-match-2nd",
+        ),
+        pytest.param(
+            "with_id_match_1st.txt",
+            "asdf",
+            "zzzzzzzzzzzzz\n# @@@ editable asdf\nblah blah blah\n# @@@ end\nzzzzzz\n# @@@ editable george\nhey there ted\n# @@@ end\nzzzzzzz\n",
+            "blah blah blah",
+            id="two-snips.-both-have-id.-match-1st",
+        ),
+        pytest.param(
+            "with_id_match_1st_and_3rd.txt",
+            "asdf",
+            "zzzzzzzzzzzzz\n# @@@ editable asdf\nblah blah blah\n# @@@ end\nzzzzzz\n# @@@ editable george\nhey there ted\n# @@@ end\nzzzzzzz\n# @@@ editable asdf\nlol lol lol\n# @@@ end\noh ok then",
+            "blah blah blah",
+            id="three-snips.-All-have-id.-match-1st-and-3rd",
+        ),
+    ),
 )
 def test_snip_contents(
-    file_name,
-    id_,
-    file_contents,
-    expected,
-    tmp_path,
-    prepare_folders_files,
-    logging_strict,
-):
+    file_name: str,
+    id_: "str | float | None",
+    file_contents: str,
+    expected: str,
+    tmp_path: Path,
+    prepare_folders_files: "Callable[[Sequence[str | Path] | MutableSet[str | Path]], set[Path]]",
+    logging_strict: "Callable[[], tuple[logging.Logger, list[logging.Logger]] | None]",
+) -> None:
     """Test snippet algo."""
     # pytest --showlocals --log-level INFO -k "test_snip_contents" tests
-    # pytest --showlocals --log-level INFO tests/test_snip.py::test_snip_contents["No snippets. Nothing to do"]
     t_two = logging_strict()
     logger, loggers = t_two
 
@@ -588,7 +591,9 @@ def test_snip_contents(
     snip = Snip(path_abs)
 
     # No preparation -- snip.contents
-    t_actual = snip.contents(id_=id_)
+    t_actual = snip.contents(
+        id_=id_,  # type: ignore[arg-type]
+    )
     assert t_actual == ReplaceResult.VALIDATE_FAIL
 
     # No preparation -- snip.print
@@ -613,10 +618,12 @@ def test_snip_contents(
         pass
     else:
         #    Block of human readable beautiful prose was printed
-        assert len(msg) != 0
+        assert msg
 
     # act -- snip.contents
-    t_actual = snip.contents(id_=id_)
+    t_actual = snip.contents(
+        id_=id_,  # type: ignore[arg-type]
+    )
 
     # assert has_logging_occurred()
 

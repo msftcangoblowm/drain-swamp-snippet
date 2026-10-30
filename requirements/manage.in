@@ -3,18 +3,8 @@
 
 # packaging and kitting
 
--c pins.in
+-c pins-typing.in
 -r prod.lock
 -r tox.lock
 
 pre-commit
-
-# pypi.org
-twine
-
-# restview restricts readme_renderer. restview maybe abandonware
-# https://github.com/mgedmin/restview/blob/master/setup.py
-# readme_renderer<37
-
-# viewer for vanilla ReStructuredText files (README.rst)
-# restview

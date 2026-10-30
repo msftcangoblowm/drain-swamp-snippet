@@ -130,7 +130,7 @@ sphinx-paramlinks==0.6.0
     # via -r docs/requirements.in
 sphinx-pyproject==0.3.0
     # via -r docs/requirements.in
-sphinx-tabs==3.4.5
+sphinx-tabs==3.5.0
     # via -r docs/requirements.in
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
@@ -167,9 +167,3 @@ watchfiles==0.24.0
     # via sphinx-autobuild
 websockets==13.1
     # via sphinx-autobuild
-
-# The following packages are considered to be unsafe in a requirements file:
-pip==24.1.2
-    # via
-    #   -r docs/requirements.in
-    #   sphinx-external-toc-strict

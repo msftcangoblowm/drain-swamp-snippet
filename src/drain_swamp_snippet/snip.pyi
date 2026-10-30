@@ -1,7 +1,7 @@
 import re
 from collections.abc import Sequence
 from enum import (
-    Enum,
+    IntEnum,
     auto,
 )
 from pathlib import Path
@@ -15,11 +15,11 @@ __all__ = (
     "ReplaceResult",
 )
 
-class ReplaceResult(Enum):
-    VALIDATE_FAIL = auto()
-    NO_MATCH = auto()
-    REPLACED = auto()
-    NO_CHANGE = auto()
+class ReplaceResult(IntEnum):
+    VALIDATE_FAIL = 1
+    NO_MATCH = 2
+    REPLACED = 3
+    NO_CHANGE = 4
     def __eq__(self, other: object) -> bool: ...
 
 def check_matching_tag_count(
@@ -29,8 +29,8 @@ def check_matching_tag_count(
 ) -> bool: ...
 def check_not_nested_or_out_of_order(
     contents: str,
-    token_start: str | None = None,
-    token_end: str | None = None,
+    token_start: str | None,
+    token_end: str | None,
 ) -> bool: ...
 def sanitize_id(id_: Any | None = "") -> str: ...
 

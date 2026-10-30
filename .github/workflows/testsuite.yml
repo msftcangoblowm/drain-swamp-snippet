@@ -50,26 +50,20 @@ jobs:
           # Available versions:
           # https://github.com/actions/python-versions/blob/main/versions-manifest.json
           # https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#available-versions-of-python-and-pypy
-          - "3.9"
-          - "3.10"
           - "3.11"
           - "3.12"
           - "3.13"
-          # - "3.14" not available yet
-          - "pypy-3.9"
-          - "pypy-3.10"
-        exclude:
-          # https://github.com/pypy/pypy/issues/4958
-          - os: windows
-            python-version: "pypy-3.9"
+          - "3.14"
+          - "3.15"
+          - "pypy-3.11"
       fail-fast: false
 
     steps:
       - name: "Check out the repo"
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v7.0.1
 
       - name: "Set up Python"
-        uses: actions/setup-python@v5.3.0
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: "${{ matrix.python-version }}"
           allow-prereleases: true
@@ -91,9 +85,7 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          python -m pip install -r requirements/tox$LOCK_SUFFIX
-          python -m pip install -r requirements/prod$LOCK_SUFFIX
-          python -m pip install -r requirements/kit$LOCK_SUFFIX
+          python -m pip install -r requirements/tox$LOCK_SUFFIX -r requirements/prod$LOCK_SUFFIX -r requirements/kit$LOCK_SUFFIX
 
       # Create generated files: version file and .lnk files. sdist tarball ignored
       - name: "Build sdist to run plugins. Create generated files"
@@ -124,6 +116,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Decide whether the needed jobs succeeded or failed
-        uses: re-actors/alls-green@223e4bb7a751b91f43eda76992bcfbf23b8b0302
+        uses: re-actors/alls-green@e68df088d4e9ee6bc36b8ea7deacf96161902d2a
         with:
           jobs: ${{ toJSON(needs) }}

@@ -8,6 +8,13 @@ Changelog
    Feature request
    .................
 
+   - refactor: FileRegression into separate module
+   - refactor: remove local has_logging_occurred fixture instead use pytest-logging-strict
+   - tests: where possible pytest.mark.parametrize with pytest.param and testcase id
+   - chore(README): display explicit support versions and respective implementions
+   - chore: bump requirements files will need to pip-compile
+   - ci: bump versions
+
    Known regressions
    ..................
 

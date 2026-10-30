@@ -1,5 +1,7 @@
 * Release checklist
 
+- pre-commit upgrade
+  $ pre-commit autoupdate
 - Adjust coverage fail under minimal percentage
   tox-test.ini
   .github/workflows/test-coverage.yml
@@ -39,7 +41,7 @@
         $ cd docs && make linkcheck; cd - &>/dev/null
         $ cd docs && make html; cd - &>/dev/null
         $ cd docs && make pdf; cd - &>/dev/null
-        $ twine check dist/*
+        $ rm -rf build/lib; cd .tox && tox -r --root=.. -e twine --workdir=.; cd - &>/dev/null
 - commit the release-prep changes
     $ make relcommit1
     or

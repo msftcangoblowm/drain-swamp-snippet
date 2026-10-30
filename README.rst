@@ -4,19 +4,19 @@ drain-swamp-snippet
 Change portions of static config files
 
 |  |kit| |codecov| |license|
-|  |last-commit| |test-status| |quality-status| |docs|
-|  |versions| |implementations|
-|  |platforms| |black|
+|  |last-commit| |quality-status| |docs|
+|  |platforms| |test-status| |versions|
+|  |implementations| |black|
 |  |downloads| |stars|
 |  |mastodon-msftcangoblowm|
 
 .. PYVERSIONS
 
-\* Python 3.9 through 3.13, PyPy
+\* Python 3.11 through 3.15, PyPy-3.11
 
 **New in 1.0.x**
 
-integration with drain-swamp-action; all badges; docs to py310;
+integration with drain-swamp-action; all badges; drop py39 py310;
 
 **New in 0.0.x**
 
@@ -103,9 +103,12 @@ Check out `introduction to cog <https://nedbatchelder.com/blog/202409/cogged_git
 .. |kit| image:: https://img.shields.io/pypi/v/drain-swamp-snippet
     :target: https://pypi.org/project/drain-swamp-snippet/
     :alt: PyPI status
-.. |versions| image:: https://img.shields.io/pypi/pyversions/drain-swamp-snippet.svg?logo=python&logoColor=FBE072
-    :target: https://pypi.org/project/drain-swamp-snippet/
+.. |versions| image:: image:: https://img.shields.io/badge/CI%20tested-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.15%20%7C%20pypy3.11-blue?logo=python&logoColor=FBE072
+    :target: https://pypi.org/project/logging-strict/
     :alt: Python versions supported
+
+.. https://img.shields.io/pypi/pyversions/drain-swamp-snippet.svg?logo=python&logoColor=FBE072
+
 .. |license| image:: https://img.shields.io/github/license/msftcangoblowm/drain-swamp-snippet
     :target: https://pypi.org/project/drain-swamp-snippet/blob/master/LICENSE
     :alt: License

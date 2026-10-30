@@ -1,6 +1,12 @@
 """
 .. moduleauthor:: Dave Faulkmore <https://mastodon.social/@msftcangoblowme>
 
+|project_name| is standalone, not a general utility. There are no dependencies.
+Keep this way to keep minimize dependencies of build backend, ``drain-swamp``.
+
+``is_ok`` is a frequently used general utility that can also be found in
+``logging_strict.util.check_type``. Use that one instead.
+
 .. py:data:: __all__
    :type: tuple[str]
    :value: ("is_ok",)

@@ -8,24 +8,27 @@ dynamic = [
     "optional-dependencies",
 ]
 dependencies = []
-license = {file = "LICENSE"}
-version = "1.0.2"
+license = "AGPL-3.0-or-later"
+license-files = [
+    "LICEN[CS]E*",
+    "NOTICE*",
+]
+version = "1.0.3"
 description = "Change portions of static config files"
 keywords = ["snippet", "pyproject.toml", "Sphinx conf.py"]
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 classifiers = [
     "Environment :: Console",
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Text Processing",
@@ -180,6 +183,7 @@ extensions = [
     "sphinx_favicon",
 ]
 linkcheck_ignore = [
+    'https?://stackoverflow\.com/.*',
     "https://github.com/nedbat/coveragepy/blob/0db5d1826d246955b96617a2b7118a40deaf8bb9/igor.py#L385",
 ]
 myst_enable_extensions = ["colon_fence", "html_image"]

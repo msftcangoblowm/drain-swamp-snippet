@@ -2,66 +2,36 @@ appdirs==1.4.4
     # via logging-strict
 attrs==24.3.0
     # via logging-strict
-backports-tarfile==1.2.0
-    # via jaraco-context
-black==24.8.0
+black==26.10.1
     # via
     #   -r requirements/dev.in
     #   blackdoc
-blackdoc==0.3.9
+blackdoc==0.4.6
     # via -r requirements/dev.in
-certifi==2024.8.30
-    # via requests
-cffi==1.17.1
-    # via cryptography
-charset-normalizer==3.3.2
-    # via requests
-click==8.1.7
+click==8.5.0
     # via black
-coverage[toml]==7.6.1
+coverage==7.6.10
     # via
     #   -r requirements/dev.in
     #   pytest-cov
-cryptography==43.0.1
-    # via secretstorage
-docutils==0.21.2
-    # via readme-renderer
 exceptiongroup==1.2.2
     # via pytest
-fastjsonschema==2.20.0
+fastjsonschema==2.21.1
     # via validate-pyproject
 flake8==7.1.1
     # via
     #   -r requirements/dev.in
     #   flake8-pyi
     #   flake8-pyproject
-flake8-pyi==24.6.0
+flake8-pyi==24.9.0
     # via -r requirements/dev.in
 flake8-pyproject==1.2.3
     # via -r requirements/dev.in
-idna==3.10
-    # via requests
-importlib-metadata==8.5.0
-    # via
-    #   keyring
-    #   twine
 iniconfig==2.0.0
     # via pytest
 isort==5.13.2
     # via -r requirements/dev.in
-jaraco-classes==3.4.0
-    # via keyring
-jaraco-context==6.0.1
-    # via keyring
-jaraco-functools==4.0.2
-    # via keyring
-jeepney==0.8.0
-    # via
-    #   keyring
-    #   secretstorage
-keyring==25.3.0
-    # via twine
-logging-strict==1.4.2
+logging-strict==1.7.2.post1
     # via pytest-logging-strict
 markdown-it-py==3.0.0
     # via rich
@@ -69,46 +39,35 @@ mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
-more-itertools==10.5.0
-    # via
-    #   blackdoc
-    #   jaraco-classes
-    #   jaraco-functools
-mypy==1.11.2
+more-itertools==10.7.0
+    # via blackdoc
+mypy==1.15.0
     # via -r requirements/dev.in
 mypy-extensions==1.0.0
     # via
     #   black
     #   mypy
-nh3==0.2.18
-    # via readme-renderer
-packaging==24.1
+packaging==26.3
     # via
     #   black
     #   pytest
-pathspec==0.12.1
+pathspec==1.1.1
     # via
     #   black
     #   blackdoc
-pkginfo==1.10.0
-    # via twine
-platformdirs==4.3.3
+platformdirs==4.9.6
     # via black
-pluggy==1.5.0
+pluggy==1.6.0
     # via pytest
 pycodestyle==2.12.1
     # via flake8
-pycparser==2.22
-    # via cffi
 pyflakes==3.2.0
     # via
     #   flake8
     #   flake8-pyi
-pygments==2.18.0
-    # via
-    #   readme-renderer
-    #   rich
-pytest==8.3.3
+pygments==2.19.1
+    # via rich
+pytest==8.3.4
     # via
     #   -r requirements/dev.in
     #   pytest-cov
@@ -117,7 +76,7 @@ pytest==8.3.3
     #   pytest-regressions
 pytest-datadir==1.5.0
     # via pytest-regressions
-pytest-logging-strict==0.1.0.post1
+pytest-logging-strict==0.2.4
     # via -r requirements/dev.in
 pytest-regressions==2.5.0
     # via -r requirements/dev.in
@@ -127,29 +86,15 @@ python-dateutil==2.9.0.post0
     #   strictyaml
 pyyaml==6.0.2
     # via pytest-regressions
-readme-renderer==44.0
-    # via twine
-requests==2.32.3
-    # via
-    #   requests-toolbelt
-    #   twine
-requests-toolbelt==1.0.0
-    # via twine
-rfc3986==2.0.0
-    # via twine
-rich==13.8.1
-    # via
-    #   blackdoc
-    #   twine
-secretstorage==3.3.3
-    # via keyring
+rich==13.9.4
+    # via blackdoc
 six==1.17.0
     # via python-dateutil
 strictyaml==1.7.3
     # via
     #   logging-strict
     #   pytest-logging-strict
-tomli==2.0.2; python_version<"3.11"
+tomli==2.4.1; python_version<"3.11"
     # via
     #   black
     #   blackdoc
@@ -158,21 +103,10 @@ tomli==2.0.2; python_version<"3.11"
     #   logging-strict
     #   mypy
     #   pytest
-twine==5.1.1
-    # via -r requirements/dev.in
-types-setuptools==74.1.0.20240907
-    # via -r requirements/dev.in
-typing-extensions==4.12.2
+typing-extensions==4.15.0 ; python_version < "3.11"
     # via
     #   black
     #   logging-strict
     #   mypy
-    #   pytest-logging-strict
-urllib3==2.2.3
-    # via
-    #   requests
-    #   twine
-validate-pyproject==0.19
+validate-pyproject==0.24.1
     # via -r requirements/dev.in
-zipp==3.20.2
-    # via importlib-metadata

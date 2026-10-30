@@ -26,11 +26,11 @@
 
 .. PYVERSIONS
 
-\* Python 3.9 through 3.13, PyPy
+\* Python 3.11 through 3.15, PyPy-3.11
 
 **New in 1.0.x**
 
-integration with drain-swamp-action; all badges; docs to py310;
+integration with drain-swamp-action; all badges; drop py39 and py310 support;
 
 **New in 0.0.x**
 

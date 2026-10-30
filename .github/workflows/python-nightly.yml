@@ -48,7 +48,8 @@ jobs:
           # See https://github.com/deadsnakes/nightly for the source of the nightly
           # builds.
           # bionic: 18, focal: 20, jammy: 22, noble: 24
-          - "ubuntu-22.04"
+          # From Nov 2026, 24 --> 26
+          runs-on: ubuntu-latest
         os-short:
           - "ubuntu"
         python-version:
@@ -56,18 +57,15 @@ jobs:
           # tox.ini so that tox will run properly. PYVERSIONS
           # Available versions:
           # https://launchpad.net/~deadsnakes/+archive/ubuntu/nightly/+packages
-          # https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa
-          - "3.12"
           - "3.13"
-          # - "3.14-full"
+          - "3.15"
           # https://github.com/actions/setup-python#available-versions-of-pypy
-          - "pypy-3.9-nightly"
-          - "pypy-3.10-nightly"
+          - "pypy-3.11-nightly"
       fail-fast: false
 
     steps:
       - name: "Check out the repo"
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v7.0.1
 
       - name: Get latest tag
         id: vars
@@ -75,13 +73,13 @@ jobs:
           echo "tag=$(git describe --tags)" >> $GITHUB_OUTPUT
 
       - name: "Install ${{ matrix.python-version }} with deadsnakes"
-        uses: deadsnakes/action@v3.2.0
+        uses: deadsnakes/action@1739fc024473bd7cced390c3e69e173e30853dc2
         if: "!startsWith(matrix.python-version, 'pypy-')"
         with:
           python-version: "${{ matrix.python-version }}"
 
       - name: "Install ${{ matrix.python-version }} with setup-python"
-        uses: actions/setup-python@v5.3.0
+        uses: actions/setup-python@v7.1.0
         if: "startsWith(matrix.python-version, 'pypy-')"
         with:
           python-version: "${{ matrix.python-version }}"

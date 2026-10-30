@@ -1,7 +1,7 @@
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
 # For details: https://github.com/msftcangoblowm/drain-swamp-snippet/blob/master/NOTICE.txt
 
--c pins.in
+-c pins-typing.in
 -r pip.lock  # avoid setuptools conflict
 
 # "make upgrade-one package=pip-tools"

@@ -25,29 +25,39 @@ import pytest
 
 from drain_swamp_snippet.check_type import is_ok
 
-testdata_is_ok = (
-    (None, False),
-    ("", False),
-    (0.123, False),
-    ("    ", False),
-    ("Hello World!", True),
-)
-ids_is_ok = (
-    "not str",
-    "empty string",
-    "not str",
-    "contains only whitespace",
-    "non-empty string",
-)
-
 
 @pytest.mark.parametrize(
     "mystr, expected",
-    testdata_is_ok,
-    ids=ids_is_ok,
+    (
+        pytest.param(
+            None,
+            False,
+            id="not-str",
+        ),
+        pytest.param(
+            "",
+            False,
+            id="empty-string",
+        ),
+        pytest.param(
+            0.123,
+            False,
+            id="not-str",
+        ),
+        pytest.param(
+            "    ",
+            False,
+            id="contains-only-whitespace",
+        ),
+        pytest.param(
+            "Hello World!",
+            True,
+            id="non-empty-string",
+        ),
+    ),
 )
 def test_is_ok(mystr, expected):
-    """Test is_ok check."""
-    # pytest --showlocals --log-level INFO -k "test_is_ok" tests
+    """Test is_ok check"""
+    # pytest --showlocals --log-level INFO -k "test_type_narrowing_is_ok" tests
     actual = is_ok(mystr)
     assert actual == expected

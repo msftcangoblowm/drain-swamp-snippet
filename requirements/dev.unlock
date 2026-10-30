@@ -9,9 +9,5 @@ mypy
 pytest-logging-strict
 pytest-regressions
 pytest>=7.1
-twine
-types-setuptools
 validate-pyproject
-readme-renderer>=44.0
 six>=1.17.0
-tomli>=2.0.2; python_version<"3.11"

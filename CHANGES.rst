@@ -13,6 +13,7 @@ Changelog
    - tests: where possible pytest.mark.parametrize with pytest.param and testcase id
    - chore(README): display explicit support versions and respective implementions
    - chore: bump requirements files will need to pip-compile
+   - ci(python-nightly): be explicit about the tox job
    - ci: bump versions
 
    Known regressions

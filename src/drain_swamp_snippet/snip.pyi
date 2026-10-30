@@ -1,9 +1,6 @@
 import re
 from collections.abc import Sequence
-from enum import (
-    IntEnum,
-    auto,
-)
+from enum import IntEnum
 from pathlib import Path
 from typing import (
     Any,

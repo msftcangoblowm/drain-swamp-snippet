@@ -8,14 +8,6 @@ Changelog
    Feature request
    .................
 
-   - refactor: FileRegression into separate module
-   - refactor: remove local has_logging_occurred fixture instead use pytest-logging-strict
-   - tests: where possible pytest.mark.parametrize with pytest.param and testcase id
-   - chore(README): display explicit support versions and respective implementions
-   - chore: bump requirements files will need to pip-compile
-   - ci(python-nightly): be explicit about the tox job
-   - ci: bump versions
-
    Known regressions
    ..................
 
@@ -23,6 +15,19 @@ Changelog
    ..............................
 
 .. scriv-start-here
+
+.. _changes_1-0-3:
+
+Version 1-0-3 — 2026-10-30
+--------------------------------
+
+- refactor: FileRegression into separate module
+- refactor: remove local has_logging_occurred fixture instead use pytest-logging-strict
+- tests: where possible pytest.mark.parametrize with pytest.param and testcase id
+- chore(README): display explicit support versions and respective implementions
+- chore: bump requirements files will need to pip-compile
+- ci(python-nightly): be explicit about the tox job
+- ci: bump versions
 
 .. _changes_1-0-2:
 
